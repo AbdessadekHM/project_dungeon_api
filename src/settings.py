@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'account.apps.AccountConfig'
+    'account.apps.AccountConfig',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,4 +144,8 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
 }
+
 AUTH_USER_MODEL = 'account.User'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
