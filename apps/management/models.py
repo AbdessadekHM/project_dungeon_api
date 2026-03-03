@@ -25,15 +25,15 @@ class Project(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     owner = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name="owner")
-    collaborators = models.ManyToManyField("account.User", related_name="collaborators")
-    repositories = models.ManyToManyField("management.Repository", related_name="repositories")
-    teams = models.ManyToManyField("management.Team", related_name="teams")
+    collaborators = models.ManyToManyField("account.User", related_name="collaborators", blank=True)
+    repositories = models.ManyToManyField("management.Repository", related_name="repositories", blank=True)
+    teams = models.ManyToManyField("management.Team", related_name="teams", blank=True)
 
 class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    status = models.CharField(max_length=20, choices=TASK_STATUS)
-    priority = models.CharField(max_length=20, choices=PRIORITY_LEVEL)
+    status = models.CharField(max_length=20, choices=TASK_STATUS, default="todo")
+    priority = models.CharField(max_length=20, choices=PRIORITY_LEVEL, default="low")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
     deadline = models.DateField()
 
@@ -41,9 +41,9 @@ class Task(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    collaborators = models.ManyToManyField("account.User", related_name="members")
+    collaborators = models.ManyToManyField("account.User", related_name="members", blank=True)
     owner = models.ForeignKey("account.User", on_delete=models.CASCADE)
-    projects = models.ManyToManyField(Project, related_name="projects")
+    projects = models.ManyToManyField(Project, related_name="projects", blank=True)
 
 class Repository(models.Model):
     name = models.CharField(max_length=100)
