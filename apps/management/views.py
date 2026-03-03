@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .models import Project, Task, Team, Repository, Event
 from .serializers import ProjectSerializer, TaskSerializer, TeamSerializer, RepositorySerializer, EventSerializer
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class BaseProjectViewSet(viewsets.ModelViewSet):
