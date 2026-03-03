@@ -20,8 +20,14 @@ class LoginSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
 
         data = super().validate(attrs)
-        data['username'] = self.user.username
-        data['user_role'] = self.user.role
+        data['user'] = {
+            "id": self.user.id,
+            "email": self.user.email,
+            "username": self.user.username,
+            "phone": self.user.phone,
+            "birth_date": self.user.birth_date,
+            "role": self.user.role
+        }
         return data
 
     @classmethod
