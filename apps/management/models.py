@@ -20,6 +20,12 @@ EVENT_TYPE = (
     ("other", "Other"),
 )
 
+TASK_TYPE = (
+    ("feature", "Feature"),
+    ("bug", "Bug"),
+    ("documentation", "Documentation"),
+    ("other", "Other"),
+)
 
 class Project(models.Model):
     title = models.CharField(max_length=100)
@@ -34,7 +40,9 @@ class Task(models.Model):
     description = models.TextField()
     status = models.CharField(max_length=20, choices=TASK_STATUS, default="todo")
     priority = models.CharField(max_length=20, choices=PRIORITY_LEVEL, default="low")
+    task_type = models.CharField(max_length=20, choices=TASK_TYPE, default="other")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
+    assignee = models.ForeignKey("account.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tasks")
     deadline = models.DateField()
 
 
