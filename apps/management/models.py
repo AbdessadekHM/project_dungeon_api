@@ -28,7 +28,6 @@ class Project(models.Model):
     collaborators = models.ManyToManyField("account.User", related_name="collaborators")
     repositories = models.ManyToManyField("management.Repository", related_name="repositories")
     teams = models.ManyToManyField("management.Team", related_name="teams")
-    
 
 class Task(models.Model):
     title = models.CharField(max_length=100)
@@ -42,14 +41,13 @@ class Task(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    collaborators = models.ManyToManyField("account.User", related_name="collaborators")
+    collaborators = models.ManyToManyField("account.User", related_name="members")
     owner = models.ForeignKey("account.User", on_delete=models.CASCADE)
     projects = models.ManyToManyField(Project, related_name="projects")
 
 class Repository(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="repositories")
     link = models.URLField()
 
 class Event(Task):
