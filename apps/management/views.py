@@ -3,23 +3,27 @@ from .models import Project, Task, Team, Repository, Event
 from .serializers import ProjectSerializer, TaskSerializer, TeamSerializer, RepositorySerializer, EventSerializer
 # Create your views here.
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class BaseProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+class ProjectViewSet(BaseProjectViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskViewSet(BaseProjectViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
     
-class TeamViewSet(viewsets.ModelViewSet):
+class TeamViewSet(BaseProjectViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     
-class RepositoryViewSet(viewsets.ModelViewSet):
+class RepositoryViewSet(BaseProjectViewSet):
     queryset = Repository.objects.all()
     serializer_class = RepositorySerializer
     
-class EventViewSet(viewsets.ModelViewSet):
+class EventViewSet(BaseProjectViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
