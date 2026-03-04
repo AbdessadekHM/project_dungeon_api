@@ -35,6 +35,16 @@ class Project(models.Model):
     repositories = models.ManyToManyField("management.Repository", related_name="repositories", blank=True)
     teams = models.ManyToManyField("management.Team", related_name="teams", blank=True)
 
+    @property
+    def calculated_tasks_count(self):
+        return len(self.tasks.all())
+
+    @property
+    def calculated_collaborators_count(self):
+        individual_ids = {user.id for user in self.collaborators.all()}
+        team_member_ids = {user.id for team in self.teams.all() for user in team.collaborators.all()}
+        return len(individual_ids.union(team_member_ids))
+
 class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()

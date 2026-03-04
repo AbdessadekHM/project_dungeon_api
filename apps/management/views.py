@@ -7,8 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 class BaseProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
+from django.db.models import Count
+
 class ProjectViewSet(BaseProjectViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.prefetch_related('tasks', 'collaborators', 'teams__collaborators')
     serializer_class = ProjectSerializer
     
     def perform_create(self, serializer):

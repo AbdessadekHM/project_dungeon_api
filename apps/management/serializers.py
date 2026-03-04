@@ -4,6 +4,9 @@ from .models import Project, Task, Team, Repository, Event
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    tasks_count = serializers.IntegerField(source='calculated_tasks_count', read_only=True)
+    collaborators_count = serializers.IntegerField(source='calculated_collaborators_count', read_only=True)
+
     class Meta:
         model = Project
         fields = '__all__'
