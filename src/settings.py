@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'apps.management.apps.ManagementConfig',
     'apps.account.apps.AccountConfig',
+    'apps.google_calendar.apps.GoogleCalendarConfig',
     'corsheaders',
 
 ]
@@ -149,4 +150,8 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = 'account.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 
