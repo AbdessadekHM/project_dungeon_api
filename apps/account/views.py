@@ -11,9 +11,14 @@ from rest_framework.exceptions import ValidationError
 # Create your views here.
 
 class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == "admin":
+            return User.objects.all()
+        return User.objects.exclude(role="admin")
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
