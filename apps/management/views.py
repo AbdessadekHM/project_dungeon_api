@@ -9,10 +9,21 @@ class BaseProjectViewSet(viewsets.ModelViewSet):
 
 from django.db.models import Count
 
+from django.db.models import Q
+
 class ProjectViewSet(BaseProjectViewSet):
-    queryset = Project.objects.prefetch_related('tasks', 'collaborators', 'teams__collaborators')
     serializer_class = ProjectSerializer
     
+    def get_queryset(self):
+        user = self.request.user
+        return Project.objects.prefetch_related(
+            'tasks', 'collaborators', 'teams__collaborators'
+        ).filter(
+            Q(owner=user) | 
+            Q(collaborators=user) | 
+            Q(teams__collaborators=user)
+        ).distinct()
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -23,8 +34,14 @@ class TaskViewSet(BaseProjectViewSet):
 
     
 class TeamViewSet(BaseProjectViewSet):
-    queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Team.objects.filter(
+            Q(owner=user) | 
+            Q(collaborators=user)
+        ).distinct()
     
 class RepositoryViewSet(BaseProjectViewSet):
     queryset = Repository.objects.all()
