@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Project, Task, Team, Repository, Event
-from .serializers import ProjectSerializer, TaskSerializer, TeamSerializer, RepositorySerializer, EventSerializer
+from .models import Project, Task, Team, Repository
+from .serializers import ProjectSerializer, TaskSerializer, TeamSerializer, RepositorySerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsProjectOwnerOrCollaborator
 from django.db.models import Count
@@ -57,7 +57,5 @@ class RepositoryViewSet(BaseProjectViewSet):
     serializer_class = RepositorySerializer
     permission_classes = [IsAuthenticated, IsProjectOwnerOrCollaborator]
     
-class EventViewSet(BaseProjectViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-    permission_classes = [IsAuthenticated, IsProjectOwnerOrCollaborator]
+# EventViewSet moved to google_calendar app
+

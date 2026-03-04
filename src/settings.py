@@ -149,7 +149,15 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'account.User'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow session cookies to be sent cross-origin (needed for OAuth PKCE flow)
+SESSION_COOKIE_SAMESITE = 'Lax' if not DEBUG else 'None'
+SESSION_COOKIE_SECURE = not DEBUG # Set to True in production with HTTPS
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")

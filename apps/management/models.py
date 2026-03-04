@@ -68,6 +68,4 @@ class Repository(models.Model):
     description = models.TextField()
     link = models.URLField()
 
-class Event(Task):
-    start_date = models.DateField()
-    end_date = models.DateField()
+# Event moved to google_calendar app

@@ -1,7 +1,13 @@
 from django.db import models
+from apps.management.models import Task
 
 # Create your models here.
 
+EVENT_TYPE = (
+    ("meeting", "Meeting"),
+    ("issues", "Issues"),
+    ("other", "Other"),
+)
 
 class Event(Task):
     start_date = models.DateField()
