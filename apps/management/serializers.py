@@ -15,7 +15,20 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ["id", "title", "description", "status", "priority", "task_type", "project", "assignee", "deadline"]
+        read_only_fields = ["id"]
+
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+        project = instance.project
+
+        if user.role == 'admin' or project.owner == user:
+            return super().update(instance, validated_data)
+
+        status = validated_data.get('status', instance.status)
+        instance.status = status
+        instance.save(update_fields=['status'])
+        return instance
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
