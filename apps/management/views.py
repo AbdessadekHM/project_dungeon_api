@@ -16,6 +16,11 @@ class ProjectViewSet(BaseProjectViewSet):
     
     def get_queryset(self):
         user = self.request.user
+        
+        # Admin can see all projects
+        if user.role == "admin":
+            return Project.objects.prefetch_related('tasks', 'collaborators', 'teams__collaborators').all()
+            
         return Project.objects.prefetch_related(
             'tasks', 'collaborators', 'teams__collaborators'
         ).filter(
@@ -38,6 +43,11 @@ class TeamViewSet(BaseProjectViewSet):
     
     def get_queryset(self):
         user = self.request.user
+        
+        # Admin can see all teams
+        if user.role == "admin":
+            return Team.objects.all()
+
         return Team.objects.filter(
             Q(owner=user) | 
             Q(collaborators=user)
