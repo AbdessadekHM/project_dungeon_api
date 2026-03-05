@@ -83,15 +83,22 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        project_id = self.request.query_params.get('project')
+
         if user.role == "admin":
-            return Event.objects.all()
-        
-        # Events associated with projects the user is involved in
-        return Event.objects.filter(
-            Q(project__owner=user) | 
-            Q(project__collaborators=user) | 
-            Q(project__teams__collaborators=user)
-        ).distinct()
+            queryset = Event.objects.all()
+        else:
+            # Events associated with projects the user is involved in
+            queryset = Event.objects.filter(
+                Q(project__owner=user) | 
+                Q(project__collaborators=user) | 
+                Q(project__teams__collaborators=user)
+            ).distinct()
+            
+        if project_id is not None:
+            queryset = queryset.filter(project_id=project_id)
+            
+        return queryset
 
 
 class GoogleAuthURLView(APIView):
