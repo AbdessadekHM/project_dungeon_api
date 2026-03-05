@@ -64,13 +64,21 @@ class IssueViewSet(BaseProjectViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        project_id = self.request.query_params.get('project')
+        
         if user.role == "admin":
-            return Issue.objects.all()
-        return Issue.objects.filter(
-            Q(project__owner=user) | 
-            Q(project__collaborators=user) | 
-            Q(project__teams__collaborators=user)
-        ).distinct()
+            queryset = Issue.objects.all()
+        else:
+            queryset = Issue.objects.filter(
+                Q(project__owner=user) | 
+                Q(project__collaborators=user) | 
+                Q(project__teams__collaborators=user)
+            ).distinct()
+            
+        if project_id is not None:
+            queryset = queryset.filter(project_id=project_id)
+            
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
