@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Task, Team, Repository, Issue
+from .models import Project, Task, Team, Repository, Issue, Message
 
 
 
@@ -48,3 +48,11 @@ class IssueSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_by', 'created_at']
 
 # EventSerializer moved to google_calendar app
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender_username = serializers.CharField(source='sender.username', read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['id', 'project', 'sender', 'sender_username', 'content', 'created_at']
+        read_only_fields = ['id', 'sender', 'sender_username', 'created_at']

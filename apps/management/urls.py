@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProjectViewSet, TaskViewSet, TeamViewSet, RepositoryViewSet, IssueViewSet
+from .views import ProjectViewSet, TaskViewSet, TeamViewSet, RepositoryViewSet, IssueViewSet, MessageViewSet
 
 urlpatterns = [
     path("projects/", ProjectViewSet.as_view(actions={"get": "list", "post": "create", "patch": "partial_update", "delete": "destroy"}), name="projects"),
@@ -16,4 +16,6 @@ urlpatterns = [
     
     path("issues/", IssueViewSet.as_view(actions={"get": "list", "post": "create", "patch": "partial_update", "delete": "destroy"}), name="issues"),
     path("issues/<int:pk>/", IssueViewSet.as_view(actions={"get": "retrieve", "patch": "partial_update", "delete": "destroy"}), name="issues-detail"),
+
+    path("messages/", MessageViewSet.as_view(actions={"get": "list", "post": "create"}), name="messages"),
 ]

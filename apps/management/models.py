@@ -91,3 +91,15 @@ class Issue(models.Model):
         return f"Issue: {self.title} (Task: {self.task.title})"
 
 # Event moved to google_calendar app
+
+class Message(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="messages")
+    sender = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name="messages")
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{self.sender.username}: {self.content[:50]}"
