@@ -45,6 +45,10 @@ class Project(models.Model):
         team_member_ids = {user.id for team in self.teams.all() for user in team.collaborators.all()}
         return len(individual_ids.union(team_member_ids))
 
+    @property
+    def calculated_completed_tasks_count(self):
+        return self.tasks.filter(status='finished').count()
+
 class Task(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
