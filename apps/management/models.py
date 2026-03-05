@@ -68,4 +68,22 @@ class Repository(models.Model):
     description = models.TextField()
     link = models.URLField()
 
+ISSUE_STATUS = (
+    ("open", "Open"),
+    ("resolved", "Resolved"),
+    ("closed", "Closed"),
+)
+
+class Issue(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    status = models.CharField(max_length=20, choices=ISSUE_STATUS, default="open")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="issues")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="issues")
+    created_by = models.ForeignKey("account.User", on_delete=models.SET_NULL, null=True, related_name="created_issues")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Issue: {self.title} (Task: {self.task.title})"
+
 # Event moved to google_calendar app

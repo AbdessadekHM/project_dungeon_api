@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Task, Team, Repository
+from .models import Project, Task, Team, Repository, Issue
 
 
 
@@ -39,5 +39,11 @@ class RepositorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
         fields = '__all__'
+
+class IssueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Issue
+        fields = '__all__'
+        read_only_fields = ['created_by', 'created_at']
 
 # EventSerializer moved to google_calendar app
