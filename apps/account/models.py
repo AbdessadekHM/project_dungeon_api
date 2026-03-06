@@ -11,7 +11,7 @@ USER_ROLES = [
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True)
-    phone = models.CharField(max_length=150, unique=True)
+    phone = models.CharField(max_length=150)
     birth_date = models.DateField(null=True, blank=True)
     role = models.CharField(max_length=150, default="user", choices=USER_ROLES)
     
