@@ -1,8 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from rest_framework_simplejwt.tokens import UntypedToken
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.tokens import UntypedToken #type:ignore
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError #type:ignore
 from django.contrib.auth import get_user_model
 from .models import Message, Project
 
@@ -12,7 +12,7 @@ User = get_user_model()
 def get_user_from_token(token_key):
     try:
         UntypedToken(token_key)
-        from rest_framework_simplejwt.backends import TokenBackend
+        from rest_framework_simplejwt.backends import TokenBackend #type:ignore
         from django.conf import settings
         data = TokenBackend(
             algorithm='HS256',
@@ -28,7 +28,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.project_id = self.scope['url_route']['kwargs']['project_id']
         self.room_group_name = f'chat_{self.project_id}'
 
-        # Authenticate via token query param
         query_string = self.scope.get('query_string', b'').decode()
         token = None
         for part in query_string.split('&'):
@@ -58,14 +57,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not content:
             return
 
-        # Save message to DB
         message = await database_sync_to_async(Message.objects.create)(
             project_id=self.project_id,
             sender=self.user,
             content=content,
         )
 
-        # Broadcast to group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
